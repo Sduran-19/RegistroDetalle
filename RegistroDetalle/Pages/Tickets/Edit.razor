@@ -151,7 +151,7 @@
         <div class="w-auto position-fixed top-50 start-50 translate-middle">
             <div class="modal-content" style="border-radius: 20px;">
 
-                <div class="modal-body bg-@mensajeColor text-center text-white" style="border-radius: 15px;">
+                <div class="modal-body bg-text-center text-white" style="border-radius: 15px;">
                     <label class="fw-bold">@mensajeTexto</label>
                 </div>
 
@@ -202,7 +202,7 @@
         }
         else
         {
-            await MostrarMensaje("Ticket no encontrado", "Invalido", "ticketnoencontrado.mp3");
+            await MostrarMensaje("Ticket no encontrado", "Invalido");
         }
     }
 
@@ -223,10 +223,9 @@
                 }
             }
 
-            
             //Agregamos los detalles del ticket
             foreach (var detalle in ListaDetalles)
-            {             
+            {
                 if (detalle.Id == 0)
                 {
                     TicketsDetalle ticketsDetalleNew = new TicketsDetalle();
@@ -237,13 +236,13 @@
                     await httpClient.PostAsJsonAsync("api/TicketsDetalle", ticketsDetalleNew);
                 }
             }
-            
-            await MostrarMensaje("Guardado Existoso.", "Valido", "guardadoExito.mp3");
+
+            await MostrarMensaje("Guardado Existoso", "Valido");
             NavigationManager.NavigateTo("/indextickets");
         }
         else
         {
-            await MostrarMensaje("No se puso contectar a la API!", "Invalido", "errorinesperado.mp3");
+            await MostrarMensaje("No se pudo conectar a la API!", "Invalido");
         }
     }
 
@@ -260,7 +259,7 @@
         }
         else
         {
-            await MostrarMensaje("Revise que los campos estén llenos...", "Inválido", "");
+            await MostrarMensaje("Revise que los campos estén llenos...", "Invalido");
         }
     }
 
@@ -268,7 +267,7 @@
     {
         detalles.Emisor = details.Emisor;
         detalles.Mensaje = details.Mensaje;
-        
+
         var detalleEncontrado = await httpClient.GetFromJsonAsync<TicketsDetalle>("api/TicketsDetalle/" + details.Id);
         if (detalleEncontrado != null)
         {
@@ -280,22 +279,21 @@
 
 
 
-    string mensajeTexto = "", mensajeColor = ""; bool ModalMensaje = false;
+    string mensajeTexto = "";
+    bool ModalMensaje = false;
 
-    public async Task MostrarMensaje(string mensaje, string tipo, string audio)
+    public async Task MostrarMensaje(string mensaje, string tipo)
     {
         mensajeTexto = mensaje;
-        await JSRuntime.InvokeVoidAsync("playAudio", "recursos/audios/" + audio);
 
-        if (tipo == "Valido")
+        if (tipo == "success")
         {
-            mensajeColor = "success";
+            mensajeTexto = "success";
         }
         else
         {
-            mensajeColor = "danger";
+            mensajeTexto = "danger";
         }
-
         ModalMensaje = true;
         StateHasChanged();
         await Task.Delay(3000);
@@ -303,3 +301,4 @@
         StateHasChanged();
     }
 }
+

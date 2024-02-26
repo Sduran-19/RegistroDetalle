@@ -80,30 +80,29 @@
         var guardado = await httpClient.PostAsJsonAsync("api/Clientes", this.clientes);
         if (guardado.IsSuccessStatusCode)
         {
-            await MostrarMensaje("Guardado Existoso.", "Valido", "guardadoExito.mp3");
+            await MostrarMensaje("Guardado Existoso.", "success");
             NavigationManager.NavigateTo("/indexcliente");
         }
         else
         {
-            await MostrarMensaje("No se puso contectar a la API!", "Invalido", "errorinesperado.mp3");
+            await MostrarMensaje("No se pudo conectar a la API!", "danger");
         }
     }
 
+    string mensajeTexto = "";
+    bool ModalMensaje = false;
 
-    string mensajeTexto = "", mensajeColor = ""; bool ModalMensaje = false;
-
-    public async Task MostrarMensaje(string mensaje, string tipo, string audio)
+    public async Task MostrarMensaje(string mensaje, string tipo)
     {
         mensajeTexto = mensaje;
-        await JSRuntime.InvokeVoidAsync("playAudio", "recursos/audios/" + audio);
 
-        if (tipo == "Valido")
+        if (tipo == "success")
         {
-            mensajeColor = "success";
+            mensajeTexto = "success";
         }
         else
         {
-            mensajeColor = "danger";
+            mensajeTexto = "danger";
         }
 
         ModalMensaje = true;

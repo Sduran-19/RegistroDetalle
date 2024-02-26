@@ -94,7 +94,7 @@
         <div class="w-auto position-fixed top-50 start-50 translate-middle">
             <div class="modal-content" style="border-radius: 20px;">
 
-                <div class="modal-body bg-@mensajeColor text-center text-white" style="border-radius: 15px;">
+                <div class="modal-body bg-text-center text-white" style="border-radius: 15px;">
                     <label class="fw-bold">@mensajeTexto</label>
                 </div>
 
@@ -113,7 +113,6 @@
     private string filtro = "ticketId";
     private string valorFiltro = "";
 
-
     public List<Tickets> ListaTickets = new List<Tickets>();
 
     protected override async Task OnInitializedAsync()
@@ -121,17 +120,14 @@
         ListaTickets = await httpClient.GetFromJsonAsync<List<Tickets>>("api/Tickets");
     }
 
-
     private async Task Buscar()
     {
         if (valorFiltro.Trim() != "")
         {
-
             if (filtro == "ticketId" && int.TryParse(valorFiltro, out int ticketId))
             {
                 ListaTickets = (await httpClient.GetFromJsonAsync<List<Tickets>>("api/Tickets"))!.Where(t => t.TicketId == ticketId).ToList();
             }
-
             else if (filtro == "clienteId" && int.TryParse(valorFiltro, out int clienteId))
             {
                 ListaTickets = (await httpClient.GetFromJsonAsync<List<Tickets>>("api/Tickets"))!.Where(t => t.ClienteId == clienteId).ToList();
@@ -143,7 +139,7 @@
 
             if (ListaTickets == null || ListaTickets.Count == 0)
             {
-                await MostrarMensaje("Ticket no encontrado", "Invalido", "ticketnoencontrado.mp3");
+                await MostrarMensaje("Ticket no encontrado", "Invalido");
             }
         }
         else
@@ -152,20 +148,20 @@
         }
     }
 
-    string mensajeTexto = "", mensajeColor = ""; bool ModalMensaje = false;
+    string mensajeTexto = "";
+    bool ModalMensaje = false;
 
-    public async Task MostrarMensaje(string mensaje, string tipo, string audio)
+    public async Task MostrarMensaje(string mensaje, string tipo)
     {
         mensajeTexto = mensaje;
-        await JSRuntime.InvokeVoidAsync("playAudio", "recursos/audios/" + audio);
 
         if (tipo == "Valido")
         {
-            mensajeColor = "success";
+            mensajeTexto = "success";
         }
         else
         {
-            mensajeColor = "danger";
+            mensajeTexto = "danger";
         }
 
         ModalMensaje = true;
@@ -176,3 +172,4 @@
     }
 
 }
+

@@ -124,7 +124,7 @@
         <div class="w-auto position-fixed top-50 start-50 translate-middle">
             <div class="modal-content" style="border-radius: 20px;">
 
-                <div class="modal-body bg-@mensajeColor text-center text-white" style="border-radius: 15px;">
+                <div class="modal-body bg-text-center text-white" style="border-radius: 15px;">
                     <label class="fw-bold">@mensajeTexto</label>
                 </div>
 
@@ -142,13 +142,10 @@
     public Clientes clientes = new Clientes();
     public TicketsDetalle detalles = new TicketsDetalle();
 
-
-
     public List<Prioridades> ListaPrioridades = new List<Prioridades>();
     public List<Clientes> ListaClientes = new List<Clientes>();
     public List<Sistemas> ListaSistemas = new List<Sistemas>();
     public List<TicketsDetalle> ListaDetalles = new List<TicketsDetalle>();
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -158,7 +155,6 @@
         tickets.Fecha = DateTime.Today;
     }
 
-
     public async Task Guardar()
     {
         var guardadoTicket = await httpClient.PostAsJsonAsync("api/Tickets", this.tickets);
@@ -167,7 +163,7 @@
         {
             var ticketCreado = await guardadoTicket.Content.ReadFromJsonAsync<Tickets>();
 
-            //Agregamos los detalles del ticket
+            // Agregamos los detalles del ticket
             foreach (var detalle in ListaDetalles)
             {
                 TicketsDetalle ticketsDetalleNew = new TicketsDetalle();
@@ -177,16 +173,15 @@
 
                 await httpClient.PostAsJsonAsync("api/TicketsDetalle", ticketsDetalleNew);
             }
-    
-             await MostrarMensaje("Guardado Existoso.", "Valido", "guardadoExito.mp3");
-             NavigationManager.NavigateTo("/indextickets");          
+
+            await MostrarMensaje("Guardado Existoso.", "success");
+            NavigationManager.NavigateTo("/indextickets");
         }
         else
         {
-            await MostrarMensaje("No se puso contectar a la API!", "Invalido", "errorinesperado.mp3");
+            await MostrarMensaje("No se pudo conectar a la API!", "danger");
         }
     }
-
 
     public async Task agregarDetalle()
     {
@@ -198,7 +193,7 @@
         }
         else
         {
-            await MostrarMensaje("Revise que los campos estén llenos...", "Inválido", "");
+            await MostrarMensaje("Revise que los campos estén llenos...", "danger");
         }
     }
 
@@ -209,22 +204,20 @@
         ListaDetalles.Remove(details);
     }
 
+    string mensajeTexto = "";
+    bool ModalMensaje = false;
 
-
-    string mensajeTexto = "", mensajeColor = ""; bool ModalMensaje = false;
-
-    public async Task MostrarMensaje(string mensaje, string tipo, string audio)
+    public async Task MostrarMensaje(string mensaje, string tipo)
     {
         mensajeTexto = mensaje;
-        await JSRuntime.InvokeVoidAsync("playAudio", "recursos/audios/" + audio);
 
-        if (tipo == "Valido")
+        if (tipo == "success")
         {
-            mensajeColor = "success";
+            mensajeTexto = "success";
         }
         else
         {
-            mensajeColor = "danger";
+            mensajeTexto = "danger";
         }
 
         ModalMensaje = true;
@@ -233,5 +226,5 @@
         ModalMensaje = false;
         StateHasChanged();
     }
-
 }
+

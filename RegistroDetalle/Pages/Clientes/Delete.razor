@@ -53,7 +53,7 @@
         <div class="w-auto position-fixed top-50 start-50 translate-middle">
             <div class="modal-content" style="border-radius: 20px;">
 
-                <div class="modal-body bg-@mensajeColor text-center text-white" style="border-radius: 15px;">
+                <div class="modal-body bg-text-center text-white" style="border-radius: 15px;">
                     <label class="fw-bold">@mensajeTexto</label>
                 </div>
 
@@ -94,7 +94,7 @@
         }
         else
         {
-            await MostrarMensaje("Cliente no encontrado", "Invalido", "clientenoencontrado.mp3");
+            await MostrarMensaje("Cliente no encontrado", "danger");
         }
     }
 
@@ -103,30 +103,29 @@
         var eliminado = await httpClient.DeleteAsync("api/Clientes/" + ClienteID);
         if (eliminado.IsSuccessStatusCode)
         {
-            await MostrarMensaje("Eliminado Existoso.", "Valido", "eliminadoExito.mp3");
+            await MostrarMensaje("Eliminado Existoso.", "success");
             NavigationManager.NavigateTo("/indexcliente");
         }
         else
         {
-            await MostrarMensaje("Error Inesperado.", "Invalido", "errorinesperado.mp3");
+            await MostrarMensaje("Error Inesperado.", "danger");
         }
     }
 
+    string mensajeTexto = "";
+    bool ModalMensaje = false;
 
-    string mensajeTexto = "", mensajeColor = ""; bool ModalMensaje = false;
-
-    public async Task MostrarMensaje(string mensaje, string tipo, string audio)
+    public async Task MostrarMensaje(string mensaje, string tipo)
     {
         mensajeTexto = mensaje;
-        await JSRuntime.InvokeVoidAsync("playAudio", "recursos/audios/" + audio);
 
-        if (tipo == "Valido")
+        if (tipo == "success")
         {
-            mensajeColor = "success";
+            mensajeTexto = "success";
         }
         else
         {
-            mensajeColor = "danger";
+            mensajeTexto = "danger";
         }
 
         ModalMensaje = true;
@@ -136,3 +135,4 @@
         StateHasChanged();
     }
 }
+

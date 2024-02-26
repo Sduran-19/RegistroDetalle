@@ -89,7 +89,7 @@
     <div class="modal d-block" style="z-index: 999999; transition: transform 0.3s ease;">
         <div class="w-auto position-fixed top-50 start-50 translate-middle">
             <div class="modal-content" style="border-radius: 20px;">
-                <div class="modal-body bg-@mensajeColor text-center text-white" style="border-radius: 15px;">
+                <div class="modal-body bg-text-center text-white" style="border-radius: 15px;">
                     <label class="fw-bold">@mensajeTexto</label>
                 </div>
             </div>
@@ -98,7 +98,7 @@
 }
 
 
-@code { 
+@code {
 
     public Clientes clientes = new Clientes();
 
@@ -122,7 +122,7 @@
         }
         else
         {
-            await MostrarMensaje("Cliente no encontrado", "Invalido", "clientenoencontrado.mp3");
+            await MostrarMensaje("Cliente no encontrado", "danger");
         }
     }
 
@@ -131,29 +131,29 @@
         var modificado = await httpClient.PutAsJsonAsync("api/Clientes", this.clientes);
         if (modificado.IsSuccessStatusCode)
         {
-            await MostrarMensaje("Guardado Exitoso.", "Valido", "guardadoExito.mp3");
+            await MostrarMensaje("Guardado Exitoso.", "success");
             NavigationManager.NavigateTo("/indexcliente");
         }
         else
         {
-            await MostrarMensaje("No se pudo conectar a la API!", "Invalido", "errorinesperado.mp3");
+            await MostrarMensaje("No se pudo conectar a la API!", "danger");
         }
     }
 
-    string mensajeTexto = "", mensajeColor = ""; bool ModalMensaje = false;
+    string mensajeTexto = "";
+    bool ModalMensaje = false;
 
-    public async Task MostrarMensaje(string mensaje, string tipo, string audio)
+    public async Task MostrarMensaje(string mensaje, string tipo)
     {
         mensajeTexto = mensaje;
-        await JSRuntime.InvokeVoidAsync("playAudio", "recursos/audios/" + audio);
 
-        if (tipo == "Valido")
+        if (tipo == "success")
         {
-            mensajeColor = "success";
+            mensajeTexto = "success";
         }
         else
         {
-            mensajeColor = "danger";
+            mensajeTexto = "danger";
         }
 
         ModalMensaje = true;
@@ -163,3 +163,5 @@
         StateHasChanged();
     }
 }
+
+
