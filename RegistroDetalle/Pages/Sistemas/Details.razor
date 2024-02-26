@@ -4,34 +4,28 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 
-    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
-        <div class="card-header bg-primary text-white text-center py-2 rounded">
-            <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Detalles Sistemas</h3>
+<div class="card shadow-lg">
+    @*Header*@
+    <div class="card-header">
+        <h3><strong>Detalle de Sistema</strong></h3>
+    </div>
+    @*Body*@
+    <div class="card-body">
+        @*Datos*@
+        <div class="mb-1">
+            <p class="mb-0">SistemaId: @sistemas.SistemaId</p>
         </div>
-
-        <div class="card-body">
-
-            <div class="row">
-                <div class="col-md-4 mb-2">
-                    <label style="font-weight: bold;" class="form-label ">ID:</label>
-                <span>@sistemas.SistemaId</span>
-                </div>
-
-                <div class="col-md-4 mb-2">
-                    <label style="font-weight: bold;" class="form-label">Nombre:</label>
-                <span>@sistemas.Nombre</span>
-                </div>
-
-
-            </div>
+        <div class="mb-1">
+            <p class="mb-0">Descripci&oacute;n: @sistemas.Nombre</p>
+        </div>
+    </div>
 
             <div class="card-footer bg-light d-flex justify-content-end">
                 <div class="btn-group">
-                <a type="button" href="/indexsistemas/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Retroceder </a>
+                <a type="button" href="/indexsistemas/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Volver </a>
                 </div>
             </div>
         </div>
-    </div>
 
 
 @if (ModalMensaje)

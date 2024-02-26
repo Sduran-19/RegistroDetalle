@@ -4,59 +4,39 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 
-    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
-        <div class="card-header bg-primary text-white text-center py-2 rounded">
-            <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Detalles Tickets</h3>
+<div class="card shadow-lg">
+    @*Header*@
+    <div class="card-header">
+        <h3><strong>Detalle de Ticket</strong></h3>
+    </div>
+    @*Body*@
+    <div class="card-body">
+        @*Datos*@
+        <div class="mb-1">
+            <p class="mb-0">TicketId: @tickets.TicketId</p>
         </div>
-
-        <div class="card-body">
-
-            <div class="row">
-                <div class="col-md-4 mb-2">
-                    <label style="font-weight: bold;" class="form-label ">Ticket ID:</label>
-                <span>@tickets.TicketId</span>
-                </div>
-
-                <div class="col-md-4 mb-2">
-                    <label style="font-weight: bold;" class="form-label">Fecha:</label>
-                <span>@tickets.Fecha</span>
-                </div>
- 
-                <div class="col-md-4 mb-2">
-                    <label style="font-weight: bold;" class="form-label">Cliente ID:</label>
-                <span>@tickets.ClienteId</span>
-                </div>
-            </div>
-
-        <div class="row">
-            <div class="col-md-4 mb-2">
-                <label style="font-weight: bold;" class="form-label ">Sistema ID:</label>
-                <span>@tickets.SistemaId</span>
-            </div>
-
-            <div class="col-md-4 mb-2">
-                <label style="font-weight: bold;" class="form-label">Priorirdad ID:</label>
-                <span>@tickets.PrioridadId</span>
-            </div>
-
-            <div class="col-md-4 mb-2">
-                <label style="font-weight: bold;" class="form-label">Solicutado por:</label>
-                <span>@tickets.Solicitadopor</span>
-            </div>
+        <div class="mb-1">
+            <p class="mb-0">Fecha: @tickets.Fecha</p>
         </div>
-
-
-        <div class="row">
-            <div class="col-md-4 mb-2">
-                <label style="font-weight: bold;" class="form-label ">Asunto:</label>
-                <span>@tickets.Asunto</span>
-            </div>
-
-            <div class="col-md-4 mb-2">
-                <label style="font-weight: bold;" class="form-label">Descripci&oacute;n:</label>
-                <span>@tickets.Descripcion</span>
-            </div>
+        <div class="mb-1">
+            <p class="mb-0">SolicitadoPor: @tickets.Solicitadopor</p>
         </div>
+        <div class="mb-1">
+            <p class="mb-0">ClienteId: @tickets.ClienteId</p>
+        </div>
+        <div class="mb-1">
+            <p class="mb-0">SistemaId: @tickets.SistemaId</p>
+        </div>
+        <div class="mb-1">
+            <p class="mb-0">Descripci&oacute;n: @tickets.Descripcion</p>
+        </div>
+        <div class="mb-1">
+            <p class="mb-0">PrioridadId: @tickets.PrioridadId</p>
+        </div>
+        <div class="mb-1">
+            <p class="mb-0">Asunto: @tickets.Asunto</p>
+        </div>
+    </div>
 
         <div class="row">
             <div class="mb-4"></div>
@@ -92,11 +72,10 @@
 
             <div class="card-footer bg-light d-flex justify-content-end">
                 <div class="btn-group">
-                <a type="button" href="/indextickets/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Retroceder </a>
+                <a type="button" href="/indextickets/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Volver </a>
                 </div>
             </div>
         </div>
-    </div>
 
 
 @if (ModalMensaje)

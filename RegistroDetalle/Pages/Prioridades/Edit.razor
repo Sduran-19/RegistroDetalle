@@ -7,34 +7,46 @@
 
 <EditForm Model="prioridades" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
+      <div class="card shadow-lg">
+            @*Header*@
+            <div class="card-header">
+                <h3><strong>Editar Prioridad</strong></h3>
+            </div>
 
-        <div class="card-header bg-primary text-white text-center py-2 rounded">
-            <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Editar Prioridades</h3>
-        </div>
-
-        <div class="card-body">
-
-            <div class="row">
-
-                <div class="col-md-6 mb-3">
-                    <label for="Descripci&oacute;n" style="font-weight: bold;" class="form-label">Descripci&oacute;n:</label>
-                    <InputText @bind-Value="prioridades.Descripcion" class="form-control" placeholder="Ingrese su Descripci&oacute;n" />
-                    <ValidationMessage For="@(() => prioridades.Descripcion)" />
+            @*Body*@
+           <div class="card-body">
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl4"></div>
+                @*ID*@
+                <div class="mb-3">
+                    <div class="col-4">
+                        <label class="form-label" for="prioridadId"><strong>PrioridadId:</strong></label>
+                        <div class="input-group">
+                            <InputNumber id="prioridadId" class="form-control" @bind-Value="prioridades.PrioridadId"></InputNumber>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="col-md-6 mb-3">
-                    <label for="DiasCompromiso" style="font-weight: bold;" class="form-label">D&iacute;as Compromiso:</label>
-                    <InputNumber @bind-Value="prioridades.DiasCompromiso" class="form-control" placeholder="Ingrese los D&iacute;as Compromiso" />
-                    <ValidationMessage For="@(() => prioridades.DiasCompromiso)" />
+                @*Descripcion*@
+                <div class="mb-3">
+                    <div class="col-4">
+                        <label class="form-label" for="entradaDescripcion"><strong>Descripci&oacute;n:</strong></label>
+                        <InputText id="entradaDescripcion" class="form-control" placeholder="Escribe una descripci&oacute;n" @bind-Value="prioridades.Descripcion"></InputText>
+                        <ValidationMessage For="@(() => prioridades.Descripcion)" />
+                    </div>
                 </div>
-
+                @*Dias compromiso*@
+                <div class="mb-3">
+                    <div class="col-4">
+                        <label class="form-label" for="entradaDiasCompromiso"><strong>D&iacute;asCompromiso:</strong></label>
+                        <InputNumber id="entradaDiasCompromiso" class="form-control" @bind-Value="prioridades.DiasCompromiso"></InputNumber>
+                        <ValidationMessage For="@(() => prioridades.DiasCompromiso)" />
+                    </div>
             </div>
         </div>
+                <div class="mb-3"></div>
 
         <div class="card-footer bg-light d-flex justify-content-end">
             <div class="btn-group">
-                <a type="button" href="/indexprioridades/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Retroceder </a>
+                <a type="button" href="/indexprioridades/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Volver </a>
                 <button type="submit" class="btn btn-outline-success"><span class="fas fa-save"></span> Guardar </button>
             </div>
         </div>

@@ -7,32 +7,39 @@
 
 <EditForm Model="sistemas" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
-
-        <div class="card-header bg-primary text-white text-center py-2 rounded">
-            <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Editar Sistemas</h3>
-        </div>
-
-        <div class="card-body">
-
-            <div class="row">
-
-                <div class="col-md-0 mb-3">
-                    <label for="Nombre" style="font-weight: bold;" class="form-label">Nombre:</label>
-                    <InputText @bind-Value="sistemas.Nombre" class="form-control" placeholder="Ingrese nombre del sistema" />
-                    <ValidationMessage For="@(() => sistemas.Nombre)" />
-                </div>
-
+   <div class="card shadow-lg">
+            @*Header*@
+            <div class="card-header">
+                <h3><strong>Editar Sistema</strong></h3>
             </div>
-        </div>
-
+            @*Body*@
+            <div class="card-body">
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-4"></div>
+                @*Id*@
+                <div class="mb-3">
+                    <div class="col-4">
+                        <label class="form-label" for="sistemaid"><strong>SistemaId:</strong></label>
+                        <div class="input-group">
+                            <InputNumber id="sistemaid" class="form-control" @bind-Value="sistemas.SistemaId"></InputNumber>
+                        </div>
+                    </div>
+                </div>
+                @*Nombre*@
+                <div class="mb-3">
+                    <div class="col-4">
+                        <label class="form-label" for="nombre"><strong>Nombre:</strong></label>
+                        <InputText id="nombre" class="form-control" @bind-Value="sistemas.Nombre" placeholder="Escriba un nombre para el sistema"></InputText>
+                        <ValidationMessage For="@(() => sistemas.Nombre)"></ValidationMessage>
+                    </div>
+                </div>
+            </div>
+    </div>
         <div class="card-footer bg-light d-flex justify-content-end">
             <div class="btn-group">
-                <a type="button" href="/indexsistemas/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Retroceder </a>
+                <a type="button" href="/indexsistemas/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Volver </a>
                 <button type="submit" class="btn btn-outline-success"><span class="fas fa-save"></span> Guardar </button>
             </div>
         </div>
-    </div>
 </EditForm>
 
 

@@ -6,19 +6,22 @@
 
 <EditForm Model="clientes" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-  
+
+    <div class="card-header">
+        <h3><strong> Registro de Cliente</strong></h3>
+    </div>
 
         <div class="card-body">
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label style="font-weight: bold;" for="Nombres" class="form-label">Nombres:</label>
+                    <label for="Nombres" class="form-label">Nombres:</label>
                     <InputText @bind-Value="clientes.Nombres" class="form-control" placeholder="Ingrese sus nombres" />
                     <ValidationMessage For="@(() => clientes.Nombres)" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label style="font-weight: bold;" for="RNC" class="form-label">RNC:</label>
+                    <label  for="RNC" class="form-label">RNC:</label>
                     <InputText @bind-Value="clientes.RNC" class="form-control" placeholder="Ingrese el RNC" />
                     <ValidationMessage For="@(() => clientes.RNC)" />
                 </div>
@@ -26,13 +29,13 @@
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label style="font-weight: bold;" for="Telefono" class="form-label">Tel&eacute;fono:</label>
+                    <label  for="Telefono" class="form-label">Tel&eacute;fono:</label>
                     <InputText @bind-Value="clientes.Telefono" class="form-control" placeholder="Ingrese el Tel&eacute;fono" />
                     <ValidationMessage For="@(() => clientes.Telefono)" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label style="font-weight: bold;" for="Celular" class="form-label">Celular:</label>
+                    <label  for="Celular" class="form-label">Celular:</label>
                     <InputText @bind-Value="clientes.Celular" class="form-control" placeholder="Ingrese el Celular" />
                     <ValidationMessage For="@(() => clientes.Celular)" />
                 </div>
@@ -40,13 +43,13 @@
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label style="font-weight: bold;"  for="Email" class="form-label">Email:</label>
+                    <label   for="Email" class="form-label">Email:</label>
                     <InputText @bind-Value="clientes.Email" class="form-control" placeholder="Ingrese el Email" />
                     <ValidationMessage For="@(() => clientes.Email)" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label style="font-weight: bold;" for="Direccion" class="form-label">Direcci&oacute;n:</label>
+                    <label  for="Direccion" class="form-label">Direcci&oacute;n:</label>
                     <InputText @bind-Value="clientes.Direccion" class="form-control" placeholder="Ingrese la Direcci&oacute;n" />
                     <ValidationMessage For="@(() => clientes.Direccion)" />
                 </div>

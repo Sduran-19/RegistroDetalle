@@ -4,14 +4,13 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 
-<div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
-    <div class="card-header bg-primary text-white text-center py-2 rounded">
-        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Eliminar Prioridades</h3>
-    </div>
+<div class="card-header">
+    <h3><strong> Eliminar Prioridad</strong></h3>
+</div>
 
     <div class="card-body text-center">
         <div class="col-md-6 mb-3 mx-auto">
-            <label style="font-weight: bold;" class="form-label font-weight-bold">ID:</label>
+            <label style="font-weight: bold;" class="form-label font-weight-bold">Id:</label>
             <span>@prioridades.PrioridadId</span>
         </div>
 
@@ -37,7 +36,6 @@
             <a href="/indexprioridades/" class="btn btn-danger btn-block"><span class="fas fa-times"></span> No</a>
         </div>
     </div>
-</div>
 
 
 @if (ModalMensaje)
