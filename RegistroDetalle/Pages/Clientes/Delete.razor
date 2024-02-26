@@ -1,0 +1,138 @@
+﻿@page "/deleteCliente/{ClienteID:int}";
+
+@inject HttpClient httpClient
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+	<div class="card shadow-lg">
+		@*Header*@
+		<div class="card-header">
+			<h3><strong>Eliminar Cliente</strong></h3>
+		</div>
+		<div class="card-body col-5">
+			<div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-4"></div>
+			<h4><strong>¿Est&aacute;s seguro de que quieres eliminar a este cliente?</strong></h4>
+			@*Datos*@
+			<div class="mb-1">
+				<p class="mb-0">ClienteId: @clientes.ClienteId</p>
+			</div>
+			<div class="mb-1">
+				<p class="mb-0">Nombre: @clientes.Nombres</p>
+			</div>
+			<div class="mb-1">
+				<p class="mb-0">Tel&eacute;fono: @clientes.Telefono</p>
+			</div>
+			<div class="mb-1">
+				<p class="mb-0">Celular: @clientes.Celular</p>
+			</div>
+			<div class="mb-1">
+				<p class="mb-0">RNC: @clientes.RNC</p>
+			</div>
+			<div class="mb-1">
+				<p class="mb-0">Email: @clientes.Email</p>
+			</div>
+			<div class="mb-1">
+				<p class="mb-0">Direcci&oacute;n: @clientes.Direccion</p>
+			</div>
+		</div>
+
+    <div class="card-footer bg-light d-flex justify-content-center">
+        <div class="btn-group">
+            <button @onclick="Eliminar" type="button" class="btn btn-success btn-block"><span class="fas fa-check"></span> S&iacute;</button>
+            <a href="/indexcliente/" class="btn btn-danger btn-block"><span class="fas fa-times"></span> No</a>
+        </div>
+    </div>
+
+</div>
+
+
+
+@if (ModalMensaje)
+{
+    <div class="modal d-block" style="z-index: 999999; transition: transform 0.3s ease;">
+        <div class="w-auto position-fixed top-50 start-50 translate-middle">
+            <div class="modal-content" style="border-radius: 20px;">
+
+                <div class="modal-body bg-@mensajeColor text-center text-white" style="border-radius: 15px;">
+                    <label class="fw-bold">@mensajeTexto</label>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@code {
+
+    public Clientes clientes = new Clientes();
+
+    private string mensajeExito = "";
+    private string mensajeFracaso = "";
+    private string exitoContenedorEstilo = "display: none;";
+    private string fracasoContenedorEstilo = "display: none;";
+
+
+    [Parameter]
+    public int ClienteID { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ClienteID > 0)
+        {
+            await Buscar();
+        }
+    }
+
+    public async Task Buscar()
+    {
+        var clienteEncontrado = await httpClient.GetFromJsonAsync<Clientes>("api/Clientes/" + ClienteID);
+        if (clienteEncontrado != null)
+        {
+            this.clientes = clienteEncontrado;
+        }
+        else
+        {
+            await MostrarMensaje("Cliente no encontrado", "Invalido", "clientenoencontrado.mp3");
+        }
+    }
+
+    public async Task Eliminar()
+    {
+        var eliminado = await httpClient.DeleteAsync("api/Clientes/" + ClienteID);
+        if (eliminado.IsSuccessStatusCode)
+        {
+            await MostrarMensaje("Eliminado Existoso.", "Valido", "eliminadoExito.mp3");
+            NavigationManager.NavigateTo("/indexcliente");
+        }
+        else
+        {
+            await MostrarMensaje("Error Inesperado.", "Invalido", "errorinesperado.mp3");
+        }
+    }
+
+
+    string mensajeTexto = "", mensajeColor = ""; bool ModalMensaje = false;
+
+    public async Task MostrarMensaje(string mensaje, string tipo, string audio)
+    {
+        mensajeTexto = mensaje;
+        await JSRuntime.InvokeVoidAsync("playAudio", "recursos/audios/" + audio);
+
+        if (tipo == "Valido")
+        {
+            mensajeColor = "success";
+        }
+        else
+        {
+            mensajeColor = "danger";
+        }
+
+        ModalMensaje = true;
+        StateHasChanged();
+        await Task.Delay(3000);
+        ModalMensaje = false;
+        StateHasChanged();
+    }
+}

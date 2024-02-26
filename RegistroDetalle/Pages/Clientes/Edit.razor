@@ -1,0 +1,165 @@
+﻿@page "/editarCliente/{ClienteID:int}";
+
+@inject HttpClient httpClient
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+
+<EditForm Model="clientes" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card shadow-lg">
+        @*Header*@
+        <div class="card-header">
+            <h3><strong>Editar Cliente</strong></h3>
+        </div>
+        @*Cuerpo*@
+        <div class="card-body">
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-4"></div>
+            @*ID*@
+            <div class="mb-3">
+                <div class="col-4">
+                    <label class="form-label" for="clienteId"><strong>ClienteId:</strong></label>
+                    <div class="input-group">
+                        <InputNumber id="clienteId" class="form-control" @bind-Value="clientes.ClienteId"></InputNumber>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="col-4">
+                    @*Nombre*@
+                    <label class="form-label" for="entradaNombre"><strong>Nombre:</strong></label>
+                    <InputText id="entradaNombre" class="form-control" placeholder="Escriba su nombre" @bind-Value="clientes.Nombres"></InputText>
+                    <ValidationMessage For="@(() => clientes.Nombres)"></ValidationMessage>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="col-4">
+                    @*Telefono*@
+                    <label class="form-label" for="telefono"><strong>Tel&eacute;fono:</strong></label>
+                    <InputText id="telefono" class="form-control" placeholder="Escriba su numero de teléfono" @bind-Value="clientes.Telefono"></InputText>
+                    <ValidationMessage For="@(() => clientes.Telefono)"></ValidationMessage>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="col-4">
+                    @*Celular*@
+                    <label class="form-label" for="celular"><strong>Celular:</strong></label>
+                    <InputText id="celular" class="form-control" placeholder="Escriba su numero de celular" @bind-Value="clientes.Celular"></InputText>
+                    <ValidationMessage For="@(() => clientes.Celular)"></ValidationMessage>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="col-4">
+                    @*RNC*@
+                    <label class="form-label" for="rnc"><strong>RNC:</strong></label>
+                    <InputText id="rnc" class="form-control" placeholder="Escriba su numero de RNC" @bind-Value="clientes.RNC"></InputText>
+                    <ValidationMessage For="@(() => clientes.RNC)"></ValidationMessage>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="col-4">
+                    @*Email*@
+                    <label class="form-label" for="email"><strong>Email:</strong></label>
+                    <InputText id="email" class="form-control" placeholder="Escriba su direccion de email" @bind-Value="clientes.Email"></InputText>
+                    <ValidationMessage For="@(() => clientes.Email)"></ValidationMessage>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="col-4">
+                    @*Direccion*@
+                    <label class="form-label" for="direccion"><strong>Direcci&oacute;n</strong></label>
+                    <InputText id="direccion" class="form-control" placeholder="Escriba su direccion" @bind-Value="clientes.Direccion"></InputText>
+                    <ValidationMessage For="@(() => clientes.Direccion)"></ValidationMessage>
+                </div>
+            </div>
+            <div class="mb-3"></div>
+        </div>
+
+        <div class="card-footer bg-light d-flex justify-content-end">
+            <div class="btn-group">
+                <a type="button" href="/indexcliente/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Volver </a>
+                <button type="submit" class="btn btn-outline-success"><span class="fas fa-save"></span> Guardar </button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@if (ModalMensaje)
+{
+    <div class="modal d-block" style="z-index: 999999; transition: transform 0.3s ease;">
+        <div class="w-auto position-fixed top-50 start-50 translate-middle">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-body bg-@mensajeColor text-center text-white" style="border-radius: 15px;">
+                    <label class="fw-bold">@mensajeTexto</label>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code { 
+
+    public Clientes clientes = new Clientes();
+
+    [Parameter]
+    public int ClienteID { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ClienteID > 0)
+        {
+            await Buscar();
+        }
+    }
+
+    public async Task Buscar()
+    {
+        var clienteEncontrado = await httpClient.GetFromJsonAsync<Clientes>("api/Clientes/" + ClienteID);
+        if (clienteEncontrado != null)
+        {
+            this.clientes = clienteEncontrado;
+        }
+        else
+        {
+            await MostrarMensaje("Cliente no encontrado", "Invalido", "clientenoencontrado.mp3");
+        }
+    }
+
+    public async Task Guardar()
+    {
+        var modificado = await httpClient.PutAsJsonAsync("api/Clientes", this.clientes);
+        if (modificado.IsSuccessStatusCode)
+        {
+            await MostrarMensaje("Guardado Exitoso.", "Valido", "guardadoExito.mp3");
+            NavigationManager.NavigateTo("/indexcliente");
+        }
+        else
+        {
+            await MostrarMensaje("No se pudo conectar a la API!", "Invalido", "errorinesperado.mp3");
+        }
+    }
+
+    string mensajeTexto = "", mensajeColor = ""; bool ModalMensaje = false;
+
+    public async Task MostrarMensaje(string mensaje, string tipo, string audio)
+    {
+        mensajeTexto = mensaje;
+        await JSRuntime.InvokeVoidAsync("playAudio", "recursos/audios/" + audio);
+
+        if (tipo == "Valido")
+        {
+            mensajeColor = "success";
+        }
+        else
+        {
+            mensajeColor = "danger";
+        }
+
+        ModalMensaje = true;
+        StateHasChanged();
+        await Task.Delay(3000);
+        ModalMensaje = false;
+        StateHasChanged();
+    }
+}

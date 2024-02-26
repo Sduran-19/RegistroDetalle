@@ -1,0 +1,171 @@
+﻿@page "/indexcliente"
+
+@inject HttpClient httpClient
+@inject IJSRuntime JSRuntime
+
+<EditForm Model="ListaClientes" class="border shadow-lg p-3 rounded">
+    <div class="card-header">
+        <h3><strong> Cliente</strong></h3>
+    </div>
+
+    <div class="card-body">
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label">Filtrar por:</label>
+                <select @bind="filtro" class="form-select">
+                    <option value="id">Id</option>
+                    <option value="nombre">Nombre</option>
+                    <option value="rnc">RNC</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label  for="ValorFiltro" class="form-label">B&uacute;squeda:</label>
+                <div class="input-group">
+                    <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                    <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                        <span class="fas fa-search"></span> Buscar
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3 text-end">
+                <a href="/createCliente" class="btn btn-outline-success" type="button"><span class="bi bi-floppy-fill"></span> Crear </a>
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered text-center">
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>RNC</th>
+                <th>Tel&eacute;fono</th>
+                <th>Celular</th>
+                <th>Email</th>
+                <th>Direcci&oacute;n</th>
+                <th>Editar</th>
+                <th>Detalle</th>
+                <th>Eliminar</th>
+            </tr>
+        <tbody>
+            @if (ListaClientes.Any())
+            {
+                @foreach (var cliente in ListaClientes)
+                {
+                    <tr>
+                        <td>@cliente.ClienteId</td>
+                        <td>@cliente.Nombres</td>
+                        <td>@cliente.RNC</td>
+                        <td>@cliente.Telefono</td>
+                        <td>@cliente.Celular</td>
+                        <td>@cliente.Email</td>
+                        <td>@cliente.Direccion</td>
+                        <td>
+                            <a href="/editarCliente/@cliente.ClienteId" class="btn-editar">
+                                <img  src="./recursos/editar.png" alt="editar" />
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/detailsCliente/@cliente.ClienteId" class="btn-detalle">
+                                <img src="./recursos/detalle.png" alt="detalle" />
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/deleteCliente/@cliente.ClienteId" class="btn-eliminar">
+                                <img  src="./recursos/eliminar.png" alt="eliminar" />
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+          
+        </tbody>
+    </table>
+</EditForm>
+
+
+
+
+@if (ModalMensaje)
+{
+    <div class="modal d-block" style="z-index: 999999; transition: transform 0.3s ease;">
+        <div class="w-auto position-fixed top-50 start-50 translate-middle">
+            <div class="modal-content" style="border-radius: 20px;">
+
+                <div class="modal-body bg-@mensajeColor text-center text-white" style="border-radius: 15px;">
+                    <label class="fw-bold">@mensajeTexto</label>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@code {
+
+    public Clientes clientes = new Clientes();
+
+    private string filtro = "id";
+    private string valorFiltro = "";
+
+    public List<Clientes> ListaClientes = new List<Clientes>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaClientes = await httpClient.GetFromJsonAsync<List<Clientes>>("api/Clientes");
+    }
+
+    private async Task Buscar()
+    {
+        if (valorFiltro.Trim() != "")
+        {
+            if (filtro == "id" && int.TryParse(valorFiltro, out int clienteId))
+            {
+                ListaClientes = (await httpClient.GetFromJsonAsync<List<Clientes>>("api/Clientes"))!.Where(c => c.ClienteId == clienteId).ToList();
+            }
+
+            else if (filtro == "nombre")
+            {
+                ListaClientes = (await httpClient.GetFromJsonAsync<List<Clientes>>("api/Clientes"))!.Where(c => c.Nombres == valorFiltro).ToList();
+            }
+            else if (filtro == "rnc")
+            {
+                ListaClientes = (await httpClient.GetFromJsonAsync<List<Clientes>>("api/Clientes"))!.Where(c => c.RNC == valorFiltro).ToList();
+            }
+
+            if (ListaClientes == null || ListaClientes.Count == 0)
+            {
+                await MostrarMensaje("Cliente no encontrado", "Invalido", "clientenoencontrado.mp3");
+            }
+        }
+        else
+        {
+            ListaClientes = await httpClient.GetFromJsonAsync<List<Clientes>>("api/Clientes");
+        }
+    }
+
+
+    string mensajeTexto = "", mensajeColor = ""; bool ModalMensaje = false;
+
+    public async Task MostrarMensaje(string mensaje, string tipo, string audio)
+    {
+        mensajeTexto = mensaje;
+        await JSRuntime.InvokeVoidAsync("playAudio", "recursos/audios/" + audio);
+
+        if (tipo == "Valido")
+        {
+            mensajeColor = "success";
+        }
+        else
+        {
+            mensajeColor = "danger";
+        }
+
+        ModalMensaje = true;
+        StateHasChanged();
+        await Task.Delay(3000);
+        ModalMensaje = false;
+        StateHasChanged();
+    }
+
+}
