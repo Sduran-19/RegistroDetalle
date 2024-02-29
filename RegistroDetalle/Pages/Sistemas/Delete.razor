@@ -32,25 +32,7 @@
         </div>
     </div>
 
-
-
-
-@if (ModalMensaje)
-{
-    <div class="modal d-block" style="z-index: 999999; transition: transform 0.3s ease;">
-        <div class="w-auto position-fixed top-50 start-50 translate-middle">
-            <div class="modal-content" style="border-radius: 20px;">
-
-                <div class="modal-body bg-text-center text-white" style="border-radius: 15px;">
-                    <label class="fw-bold">@mensajeTexto</label>
-                </div>
-
-            </div>
-        </div>
-    </div>
-}
-
-
+    @mensajeTexto
 
 @code {
 
@@ -76,7 +58,7 @@
         }
         else
         {
-            await MostrarMensaje("Sistema no encontrado", "danger");
+            await MostrarMensaje("Sistema no encontrado", false);
         }
     }
 
@@ -85,29 +67,29 @@
         var eliminado = await httpClient.DeleteAsync("api/Sistemas/" + SistemaID);
         if (eliminado.IsSuccessStatusCode)
         {
-            await MostrarMensaje("Eliminado Existoso.", "success");
+            await MostrarMensaje("Eliminado Existoso.", true);
             NavigationManager.NavigateTo("/indexsistemas");
         }
         else
         {
-            await MostrarMensaje("Error Inesperado.", "danger");
+            await MostrarMensaje("Error Inesperado.", false);
         }
     }
 
     string mensajeTexto = "";
     bool ModalMensaje = false;
 
-    public async Task MostrarMensaje(string mensaje, string tipo)
+    public async Task MostrarMensaje(string mensaje, bool exito)
     {
         mensajeTexto = mensaje;
 
-        if (tipo == "success")
+        if (exito)
         {
-            mensajeTexto = "success";
+            mensajeTexto = "Eliminado con Exito";
         }
         else
         {
-            mensajeTexto = "danger";
+            mensajeTexto = "Error";
         }
 
         ModalMensaje = true;

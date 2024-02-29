@@ -34,6 +34,7 @@
         </div>
     </div>
     <table class="table table-bordered text-center">
+        <thead>
             <tr>
                 <th>Id</th>
                 <th>Nombre</th>
@@ -41,6 +42,7 @@
                 <th>Detalle</th>
                 <th>Eliminar</th>
             </tr>
+        </thead>
         <tbody>
             @if (ListaSistemas.Any())
             {
@@ -50,18 +52,15 @@
                         <td>@sistema.SistemaId</td>
                         <td>@sistema.Nombre</td>
                         <td>
-                            <a href="/editarsistema/@sistema.SistemaId" style="border: none; background-color: transparent;" class="btn-editar">
-                                <img style="width: 32px; height: 32px;" src="./recursos/editar.png" alt="editar" />
+                            <a href="/editarsistema/@sistema.SistemaId" class="btn-editar"> Editar
                             </a>
                         </td>
                         <td>
-                            <a href="/detailssistema/@sistema.SistemaId" style="border: none; background-color: transparent;" class="btn-detalle">
-                                <img style="width: 32px; height: 32px;" src="./recursos/detalle.png" alt="detalle" />
+                            <a href="/detailssistema/@sistema.SistemaId" class="btn-detalle"> Ver
                             </a>
                         </td>
                         <td>
-                            <a href="/deletessistema/@sistema.SistemaId" style="border: none; background-color: transparent;" class="btn-eliminar">
-                                <img style="width: 32px; height: 32px;" src="./recursos/eliminar.png" alt="eliminar" />
+                            <a href="/deletessistema/@sistema.SistemaId" class="btn-eliminar"> Eliminar
                             </a>
                         </td>
                     </tr>
@@ -70,24 +69,13 @@
            
         </tbody>
     </table>
+
+    @mensajeTexto
 </EditForm>
 
 
 
-@if (ModalMensaje)
-{
-    <div class="modal d-block" style="z-index: 999999; transition: transform 0.3s ease;">
-        <div class="w-auto position-fixed top-50 start-50 translate-middle">
-            <div class="modal-content" style="border-radius: 20px;">
 
-                <div class="modal-body bg-text-center text-white" style="border-radius: 15px;">
-                    <label class="fw-bold">@mensajeTexto</label>
-                </div>
-
-            </div>
-        </div>
-    </div>
-}
 
 
 
@@ -121,7 +109,7 @@
             }
             if (ListaSistemas == null || ListaSistemas.Count == 0)
             {
-                await MostrarMensaje("Sistema no encontrado", "Invalido");
+                await MostrarMensaje("Sistema no encontrado", false);
             }
         }
         else
@@ -134,17 +122,17 @@
     string mensajeTexto = "";
     bool ModalMensaje = false;
 
-    public async Task MostrarMensaje(string mensaje, string tipo)
+    public async Task MostrarMensaje(string mensaje, bool exito)
     {
         mensajeTexto = mensaje;
 
-        if (tipo == "Valido")
+        if (exito)
         {
-            mensajeTexto = "success";
+            mensajeTexto = "Encontrado con Exito";
         }
         else
         {
-            mensajeTexto = "danger";
+            mensajeTexto = "Error";
         }
 
         ModalMensaje = true;

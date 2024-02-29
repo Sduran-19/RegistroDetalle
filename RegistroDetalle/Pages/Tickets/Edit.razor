@@ -76,22 +76,22 @@
         </div>
 
 
-        <div class="card-header bg-primary text-white text-center">
-            <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Detalles del Ticket</h3>
-        </div>
+   
 
         <div class="modal-body">
-
+        <div class="card-header">
+            <h3><strong>Editar Detalle</strong></h3>
+        </div>
             <div class="row">
 
                 <div class="col">
                     <div>
                         <label class="fw-bold">Emisor:</label>
-                        <InputText class="form-control mb-2" @bind-Value="detalles.Emisor"></InputText>
+                    <InputText class="form-control mb-2" @bind-Value="detalles.Emisor" placeholder="Ingrese un Nombre"></InputText>
                     </div>
                     <div>
                         <label class="fw-bold">Mensaje:</label>
-                        <InputTextArea class="form-control mb-2" @bind-Value="detalles.Mensaje"></InputTextArea>
+                    <InputTextArea class="form-control mb-2" @bind-Value="detalles.Mensaje" placeholder="Ingrese un Mensaje"></InputTextArea>
                     </div>
                     <div class="text-end mb-2">
                         <button type="button" class="btn btn-success" @onclick="agregarDetalle"><i class="fas fa-plus"></i> Agregar</button>
@@ -118,7 +118,7 @@
                                     <tr>
                                         <td class="col-3">@item.Emisor</td>
                                         <td class="col-7">@item.Mensaje</td>
-                                        <td class="col-1"><button type="button" style="background: transparent; border: none;" @onclick="(() => eliminarDetalle(item))"><img style="width: 32px; height: 32px;" src="./recursos/eliminar.png" alt="eliminar" /></button></td>
+                                        <td class="col-1"><button type="button" @onclick="(() => eliminarDetalle(item))">Eliminar</button></td>
                                     </tr>
                                 }
                             }
@@ -137,28 +137,14 @@
 
         <div class="card-footer bg-light d-flex justify-content-end">
             <div class="btn-group">
-                <a type="button" href="/indextickets/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Retroceder </a>
+                <a type="button" href="/indextickets/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Volver </a>
                 <button type="submit" class="btn btn-outline-success"><span class="fas fa-save"></span> Guardar </button>
             </div>
         </div>
+
+        @mensajeTexto
 </EditForm>
 
-
-
-@if (ModalMensaje)
-{
-    <div class="modal d-block" style="z-index: 999999; transition: transform 0.3s ease;">
-        <div class="w-auto position-fixed top-50 start-50 translate-middle">
-            <div class="modal-content" style="border-radius: 20px;">
-
-                <div class="modal-body bg-text-center text-white" style="border-radius: 15px;">
-                    <label class="fw-bold">@mensajeTexto</label>
-                </div>
-
-            </div>
-        </div>
-    </div>
-}
 
 
 
@@ -202,7 +188,8 @@
         }
         else
         {
-            await MostrarMensaje("Ticket no encontrado", "Invalido");
+            await MostrarMensaje("Error en la operación", false);
+
         }
     }
 
@@ -237,13 +224,15 @@
                 }
             }
 
-            await MostrarMensaje("Guardado Existoso", "Valido");
+            await MostrarMensaje("Operación completada", true);
+
             NavigationManager.NavigateTo("/indextickets");
         }
         else
         {
-            await MostrarMensaje("No se pudo conectar a la API!", "Invalido");
+            await MostrarMensaje("Error en la operación", false);
         }
+
     }
 
 
@@ -259,7 +248,8 @@
         }
         else
         {
-            await MostrarMensaje("Revise que los campos estén llenos...", "Invalido");
+                await MostrarMensaje("Error en la operación", false);
+
         }
     }
 
@@ -282,17 +272,17 @@
     string mensajeTexto = "";
     bool ModalMensaje = false;
 
-    public async Task MostrarMensaje(string mensaje, string tipo)
+    public async Task MostrarMensaje(string mensaje, bool exito)
     {
         mensajeTexto = mensaje;
 
-        if (tipo == "success")
+        if (exito)
         {
-            mensajeTexto = "success";
+            mensajeTexto = "Editado con Exito";
         }
         else
         {
-            mensajeTexto = "danger";
+            mensajeTexto = "Error";
         }
         ModalMensaje = true;
         StateHasChanged();

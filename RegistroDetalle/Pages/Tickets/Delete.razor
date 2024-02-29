@@ -73,23 +73,10 @@
         </div>
     </div>
 
+    @mensajeTexto
 
 
 
-@if (ModalMensaje)
-{
-    <div class="modal d-block" style="z-index: 999999; transition: transform 0.3s ease;">
-        <div class="w-auto position-fixed top-50 start-50 translate-middle">
-            <div class="modal-content" style="border-radius: 20px;">
-
-                <div class="modal-body-text-center text-white">
-                    <label class="fw-bold">@mensajeTexto</label>
-                </div>
-
-            </div>
-        </div>
-    </div>
-}
 
 
 
@@ -119,7 +106,7 @@
         }
         else
         {
-            await MostrarMensaje("Ticket no encontrado", "danger");
+            await MostrarMensaje("Ticket no encontrado", false);
         }
     }
 
@@ -136,29 +123,30 @@
                 }
             }
 
-            await MostrarMensaje("Eliminado Existoso.", "success");
+            await MostrarMensaje("Eliminado Existoso.", true);
             NavigationManager.NavigateTo("/indextickets");
         }
         else
         {
-            await MostrarMensaje("Error Inesperado.", "danger");
+            await MostrarMensaje("Error Inesperado.", false);
         }
     }
 
     string mensajeTexto = "";
     bool ModalMensaje = false;
 
-    public async Task MostrarMensaje(string mensaje, string tipo)
+
+    public async Task MostrarMensaje(string mensaje, bool exito)
     {
         mensajeTexto = mensaje;
 
-        if (tipo == "success")
+        if (exito)
         {
-            mensajeTexto = "success";
+            mensajeTexto = "Eliminado con Exito";
         }
         else
         {
-            mensajeTexto = "danger";
+            mensajeTexto = "Error";
         }
 
         ModalMensaje = true;

@@ -29,23 +29,12 @@
                 <button type="submit" class="btn btn-outline-success"><span class="fas fa-save"></span> Guardar </button>
             </div>
         </div>
+
+    @mensajeTexto
 </EditForm>
 
 
-@if (ModalMensaje)
-{
-    <div class="modal d-block" style="z-index: 999999; transition: transform 0.3s ease;">
-        <div class="w-auto position-fixed top-50 start-50 translate-middle">
-            <div class="modal-content" style="border-radius: 20px;">
 
-                <div class="modal-body-text-center text-white">
-                    <label class="fw-bold">@mensajeTexto</label>
-                </div>
-
-            </div>
-        </div>
-    </div>
-}
 
 
 @code {
@@ -57,29 +46,29 @@
         var guardado = await httpClient.PostAsJsonAsync("api/Sistemas", this.sistemas);
         if (guardado.IsSuccessStatusCode)
         {
-            await MostrarMensaje("Guardado Existoso.", "success");
+            await MostrarMensaje("Guardado Existoso.", true);
             NavigationManager.NavigateTo("/indexsistemas");
         }
         else
         {
-            await MostrarMensaje("No se pudo conectar a la API!", "danger");
+            await MostrarMensaje("Error, No se guardo", false);
         }
     }
 
     string mensajeTexto = "";
     bool ModalMensaje = false;
 
-    public async Task MostrarMensaje(string mensaje, string tipo)
+    public async Task MostrarMensaje(string mensaje, bool exito)
     {
         mensajeTexto = mensaje;
 
-        if (tipo == "success")
+        if (exito)
         {
-            mensajeTexto = "success";
+            mensajeTexto = "Creado con Exito";
         }
         else
         {
-            mensajeTexto = "danger";
+            mensajeTexto = "Error";
         }
 
         ModalMensaje = true;

@@ -60,9 +60,13 @@
         <div class="card-footer bg-light d-flex justify-content-end">
             <div class="btn-group">
                 <a type="button" href="/indexcliente/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Volver </a>
-                <button type="submit" class="btn btn-outline-success"><span class="fas fa-save"></span> Guardar </button>
+            <button type="submit" class="btn btn-outline-success">
+                <i class="bi bi-floppy-fill" /> Guardar
+            </button>
             </div>
         </div>
+
+        @mensajeTexto
 </EditForm>
 
 
@@ -80,29 +84,29 @@
         var guardado = await httpClient.PostAsJsonAsync("api/Clientes", this.clientes);
         if (guardado.IsSuccessStatusCode)
         {
-            await MostrarMensaje("Guardado Existoso.", "success");
+            await MostrarMensaje("Guardado Existoso.", true);
             NavigationManager.NavigateTo("/indexcliente");
         }
         else
         {
-            await MostrarMensaje("No se pudo conectar a la API!", "danger");
+            await MostrarMensaje("No se pudo conectar a la API!", false);
         }
     }
 
     string mensajeTexto = "";
     bool ModalMensaje = false;
 
-    public async Task MostrarMensaje(string mensaje, string tipo)
+    public async Task MostrarMensaje(string mensaje, bool exito)
     {
         mensajeTexto = mensaje;
 
-        if (tipo == "success")
+        if (exito)
         {
-            mensajeTexto = "success";
+            mensajeTexto = "Creado con Exito";
         }
         else
         {
-            mensajeTexto = "danger";
+            mensajeTexto = "Error";
         }
 
         ModalMensaje = true;

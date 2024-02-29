@@ -81,58 +81,72 @@
             <h3><strong> Detalle de Tickets</strong></h3>
         </div>
 
-        <div class="modal-body">
+    <div class="modal-body">
 
-            <div class="row">
-                
-                <div class="col">
-                    <div>
-                        <label class="fw-bold">Emisor:</label>
-                    <InputText @bind-Value="detalles.Emisor" class="form-control" placeholder="Ingrese un nombre"></InputText>
-                    </div>
-                    <div>
-                        <label class="fw-bold">Mensaje:</label>
-                    <InputTextArea c @bind-Value="detalles.Mensaje" class="form-control" placeholder="Ingrese un mensaje"></InputTextArea>
-                    </div>
-                   
+        <div class="row">
+
+            <div class="col">
+                <div>
+                    <label class="fw-bold">Emisor:</label>
+                    <InputText class="form-control mb-2" @bind-Value="detalles.Emisor" placeholder="Ingrese un Nombre"></InputText>
                 </div>
-
-               
-            </div>  
-        </div>
-
-        <div class="card-footer bg-light d-flex justify-content-end">
-            <div class="btn-group">
-                <a type="button" href="/indextickets/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Volver </a>
-                <button type="submit" class="btn btn-outline-success"><span class="fas fa-save"></span> Guardar </button>
-            </div>
-        </div>
-</EditForm>
-
-
-
-           
-
-
-
-
-
-
-@if (ModalMensaje)
-{
-    <div class="modal d-block" style="z-index: 999999; transition: transform 0.3s ease;">
-        <div class="w-auto position-fixed top-50 start-50 translate-middle">
-            <div class="modal-content" style="border-radius: 20px;">
-
-                <div class="modal-body bg-text-center text-white" style="border-radius: 15px;">
-                    <label class="fw-bold">@mensajeTexto</label>
+                <div>
+                    <label class="fw-bold">Mensaje:</label>
+                    <InputTextArea class="form-control mb-2" @bind-Value="detalles.Mensaje" placeholder="Ingrese un mensaje"></InputTextArea>
                 </div>
-
+                <div class="text-end mb-2">
+                    <button type="button" class="btn btn-outline-success" @onclick="agregarDetalle"><i class="bi bi-floppy-fill"></i> Agregar</button>
+                </div>
             </div>
+
+            <div class="col-5">
+                <div class="mb-4"></div>
+                <table class="table table-bordered text-center">
+
+                    <thead class="bg-secondary text-white">
+                        <tr>
+                            <th class="col-3">Emisor</th>
+                            <th class="col-7">Mensaje</th>
+                            <th class="col-1">Eliminar</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (ListaDetalles.Any())
+                        {
+                            @foreach (var item in ListaDetalles)
+                            {
+                                <tr>
+                                    <td class="col-3">@item.Emisor</td>
+                                    <td class="col-7">@item.Mensaje</td>
+                                    <td class="col-1"><button type="button" class="btn btn-outline-danger" @onclick="(() => eliminarDetalle(item))"><i class="bi bi-trash3-fill" />Eliminar</button></td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="3">No hay mensajes...</td></tr>
+                        }
+                    </tbody>
+
+                </table>      
+            </div>
+            
+           <div class="card-footer bg-light d-flex justify-content-end">
+
+                    <div class="btn-group">
+                        <a type="button" href="/indextickets/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Volver </a>
+                    </div>
+            <button type="submit" class="btn btn-outline-success">
+                <i class="bi bi-floppy-fill" /> Guardar
+            </button>
+           </div>
         </div>
     </div>
-}
 
+    
+@mensajeTexto
+</EditForm>
 
 
 
@@ -174,12 +188,12 @@
                 await httpClient.PostAsJsonAsync("api/TicketsDetalle", ticketsDetalleNew);
             }
 
-            await MostrarMensaje("Guardado Existoso.", "success");
+            await MostrarMensaje("Guardado Existoso.", true);
             NavigationManager.NavigateTo("/indextickets");
         }
         else
         {
-            await MostrarMensaje("No se pudo conectar a la API!", "danger");
+            await MostrarMensaje("Error, no se guardo", false);
         }
     }
 
@@ -187,13 +201,13 @@
     {
         if (!string.IsNullOrEmpty(detalles.Emisor) && !string.IsNullOrEmpty(detalles.Mensaje))
         {
-            ListaDetalles.Add(new TicketsDetalle(0, detalles.Emisor, detalles.Mensaje));
+            ListaDetalles.Add(new TicketsDetalle(detalles.TicketId, detalles.Emisor, detalles.Mensaje));
             detalles.Emisor = "";
             detalles.Mensaje = "";
         }
         else
         {
-            await MostrarMensaje("Revise que los campos estén llenos...", "danger");
+            await MostrarMensaje("Revise que los campos estén llenos...", false);
         }
     }
 
@@ -207,17 +221,19 @@
     string mensajeTexto = "";
     bool ModalMensaje = false;
 
-    public async Task MostrarMensaje(string mensaje, string tipo)
+
+
+    public async Task MostrarMensaje(string mensaje, bool exito)
     {
         mensajeTexto = mensaje;
 
-        if (tipo == "success")
+        if (exito)
         {
-            mensajeTexto = "success";
+            mensajeTexto = "Creado con Exito";
         }
         else
         {
-            mensajeTexto = "danger";
+            mensajeTexto = "Error";
         }
 
         ModalMensaje = true;

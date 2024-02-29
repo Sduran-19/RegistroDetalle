@@ -11,16 +11,10 @@ namespace RegistroDetalle.Models
 		[Required(ErrorMessage = "El campo fecha es obligatorio")]
 		public DateTime Fecha { get; set; }
 
-		[Range(1, int.MaxValue, ErrorMessage = "Selecciona una prioridad")]
-		[ForeignKey("Prioridades")]
 		public int PrioridadId { get; set; }
 
-		[Range(1, int.MaxValue, ErrorMessage = "Selecciona un cliente")]
-		[ForeignKey("Clientes")]
 		public int ClienteId { get; set; }
 
-		[Range(1, int.MaxValue, ErrorMessage = "Selecciona un sistema")]
-		[ForeignKey("Sistemas")]
 		public int SistemaId { get; set; }
 
 		[Required(ErrorMessage = "El campo solicitado por es obligatorio")]

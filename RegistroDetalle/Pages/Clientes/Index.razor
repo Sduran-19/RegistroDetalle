@@ -33,6 +33,7 @@
         </div>
     </div>
     <table class="table table-bordered text-center">
+        <thead>
             <tr>
                 <th>Id</th>
                 <th>Nombre</th>
@@ -45,11 +46,13 @@
                 <th>Detalle</th>
                 <th>Eliminar</th>
             </tr>
+        </thead>
         <tbody>
             @if (ListaClientes.Any())
             {
                 @foreach (var cliente in ListaClientes)
                 {
+                    
                     <tr>
                         <td>@cliente.ClienteId</td>
                         <td>@cliente.Nombres</td>
@@ -59,45 +62,26 @@
                         <td>@cliente.Email</td>
                         <td>@cliente.Direccion</td>
                         <td>
-                            <a href="/editarCliente/@cliente.ClienteId" class="btn-editar">
-                                <img  src="./recursos/editar.png" alt="editar" />
+                            <a href="/editarCliente/@cliente.ClienteId" class="btn-editar"> Editar
                             </a>
                         </td>
                         <td>
-                            <a href="/detailsCliente/@cliente.ClienteId" class="btn-detalle">
-                                <img src="./recursos/detalle.png" alt="detalle" />
+                            <a href="/detailsCliente/@cliente.ClienteId" class="btn-detalle"> Ver
                             </a>
                         </td>
                         <td>
-                            <a href="/deleteCliente/@cliente.ClienteId" class="btn-eliminar">
-                                <img  src="./recursos/eliminar.png" alt="eliminar" />
+                            <a href="/deleteCliente/@cliente.ClienteId" class="btn-eliminar"> Eliminar
                             </a>
                         </td>
                     </tr>
                 }
             }
           
-        </tbody>
+       </tbody>
     </table>
+
+    @mensajeTexto
 </EditForm>
-
-
-
-
-@if (ModalMensaje)
-{
-    <div class="modal d-block" style="z-index: 999999; transition: transform 0.3s ease;">
-        <div class="w-auto position-fixed top-50 start-50 translate-middle">
-            <div class="modal-content" style="border-radius: 20px;">
-
-                <div class="modal-body bg- text-center text-white" style="border-radius: 15px;">
-                    <label class="fw-bold">@mensajeTexto</label>
-                </div>
-
-            </div>
-        </div>
-    </div>
-}
 
 
 
@@ -135,7 +119,7 @@
 
             if (ListaClientes == null || ListaClientes.Count == 0)
             {
-                await MostrarMensaje("Cliente no encontrado", "Invalido");
+                await MostrarMensaje("Cliente no encontrado", false);
             }
         }
         else
@@ -148,25 +132,25 @@
     string mensajeTexto = "";
     bool ModalMensaje = false;
 
-    public async Task MostrarMensaje(string mensaje, string tipo)
-    {
-        mensajeTexto = mensaje;
-
-        if (tipo == "Valido")
+        public async Task MostrarMensaje(string mensaje, bool exito)
         {
-            mensajeTexto = "success";
-        }
-        else
-        {
-            mensajeTexto = "danger";
-        }
+            mensajeTexto = mensaje;
 
-        ModalMensaje = true;
-        StateHasChanged();
-        await Task.Delay(3000);
-        ModalMensaje = false;
-        StateHasChanged();
-    }
+            if (exito)
+            {
+                mensajeTexto = "Encontrado con Exito";
+            }
+            else
+            {
+                mensajeTexto = "Error";
+            }
+
+            ModalMensaje = true;
+            StateHasChanged();
+            await Task.Delay(3000);
+            ModalMensaje = false;
+            StateHasChanged();
+        }
 
 }
 

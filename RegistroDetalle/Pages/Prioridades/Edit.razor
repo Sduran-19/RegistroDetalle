@@ -51,24 +51,11 @@
             </div>
         </div>
     </div>
+    @mensajeTexto
 </EditForm>
 
 
 
-@if (ModalMensaje)
-{
-    <div class="modal d-block" style="z-index: 999999; transition: transform 0.3s ease;">
-        <div class="w-auto position-fixed top-50 start-50 translate-middle">
-            <div class="modal-content" style="border-radius: 20px;">
-
-                <div class="modal-body bg-text-center text-white" style="border-radius: 15px;">
-                    <label class="fw-bold">@mensajeTexto</label>
-                </div>
-
-            </div>
-        </div>
-    </div>
-}
 
 
 
@@ -96,7 +83,7 @@
         }
         else
         {
-            await MostrarMensaje("Prioridad no encontrada", "Invalido");
+            await MostrarMensaje("Prioridad no encontrada", false);
         }
     }
 
@@ -106,12 +93,12 @@
         var guardado = await httpClient.PutAsJsonAsync("api/Prioridades", this.prioridades);
         if (guardado.IsSuccessStatusCode)
         {
-            await MostrarMensaje("Guardado Existoso.", "Valido");
+            await MostrarMensaje("Guardado Existoso.", true);
             NavigationManager.NavigateTo("/indexprioridades");
         }
         else
         {
-            await MostrarMensaje("No se puso conectar a la API!", "Invalido");
+            await MostrarMensaje("No se puso conectar a la API", false);
         }
     }
 
@@ -119,17 +106,17 @@
     string mensajeTexto = "";
     bool ModalMensaje = false;
 
-    public async Task MostrarMensaje(string mensaje, string tipo)
+    public async Task MostrarMensaje(string mensaje, bool exito)
     {
         mensajeTexto = mensaje;
 
-        if (tipo == "Valido")
+        if (exito)
         {
-            mensajeTexto = "success";
+            mensajeTexto = "Editado con Exito";
         }
         else
         {
-            mensajeTexto = "danger";
+            mensajeTexto = "Error";
         }
 
         ModalMensaje = true;
